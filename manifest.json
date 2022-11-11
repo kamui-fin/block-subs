@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Sub Blocker",
+    "version": "1.0",
+    "description": "Blocks hardcoded subs with a bar for any website",
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "js": ["scripts/content.js"],
+            "matches": ["https://*/*", "http://*/*"]
+        }
+    ],
+    "icons": {
+        "16": "images/16x16.png",
+        "19": "images/19x19.png",
+        "48": "images/48x48.png",
+        "128": "images/48x48.png"
+    }
+}
