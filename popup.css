@@ -1,3 +1,152 @@
+/* inter-regular - latin */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../fonts/inter-v12-latin-regular.eot"); /* IE9 Compat Modes */
+    src: local(""),
+        url("../fonts/inter-v12-latin-regular.eot?#iefix")
+            format("embedded-opentype"),
+        /* IE6-IE8 */ url("../fonts/inter-v12-latin-regular.woff2")
+            format("woff2"),
+        /* Super Modern Browsers */ url("../fonts/inter-v12-latin-regular.woff")
+            format("woff"),
+        /* Modern Browsers */ url("../fonts/inter-v12-latin-regular.ttf")
+            format("truetype"),
+        /* Safari, Android, iOS */
+            url("../fonts/inter-v12-latin-regular.svg#Inter") format("svg"); /* Legacy iOS */
+}
+/* inter-500 - latin */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    src: url("../fonts/inter-v12-latin-500.eot"); /* IE9 Compat Modes */
+    src: local(""),
+        url("../fonts/inter-v12-latin-500.eot?#iefix")
+            format("embedded-opentype"),
+        /* IE6-IE8 */ url("../fonts/inter-v12-latin-500.woff2") format("woff2"),
+        /* Super Modern Browsers */ url("../fonts/inter-v12-latin-500.woff")
+            format("woff"),
+        /* Modern Browsers */ url("../fonts/inter-v12-latin-500.ttf")
+            format("truetype"),
+        /* Safari, Android, iOS */ url("../fonts/inter-v12-latin-500.svg#Inter")
+            format("svg"); /* Legacy iOS */
+}
+/* inter-600 - latin */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    src: url("../fonts/inter-v12-latin-600.eot"); /* IE9 Compat Modes */
+    src: local(""),
+        url("../fonts/inter-v12-latin-600.eot?#iefix")
+            format("embedded-opentype"),
+        /* IE6-IE8 */ url("../fonts/inter-v12-latin-600.woff2") format("woff2"),
+        /* Super Modern Browsers */ url("../fonts/inter-v12-latin-600.woff")
+            format("woff"),
+        /* Modern Browsers */ url("../fonts/inter-v12-latin-600.ttf")
+            format("truetype"),
+        /* Safari, Android, iOS */ url("../fonts/inter-v12-latin-600.svg#Inter")
+            format("svg"); /* Legacy iOS */
+}
+/* inter-700 - latin */
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    src: url("../fonts/inter-v12-latin-700.eot"); /* IE9 Compat Modes */
+    src: local(""),
+        url("../fonts/inter-v12-latin-700.eot?#iefix")
+            format("embedded-opentype"),
+        /* IE6-IE8 */ url("../fonts/inter-v12-latin-700.woff2") format("woff2"),
+        /* Super Modern Browsers */ url("../fonts/inter-v12-latin-700.woff")
+            format("woff"),
+        /* Modern Browsers */ url("../fonts/inter-v12-latin-700.ttf")
+            format("truetype"),
+        /* Safari, Android, iOS */ url("../fonts/inter-v12-latin-700.svg#Inter")
+            format("svg"); /* Legacy iOS */
+}
+
 body {
-    width: 20rem;
+    width: 18rem;
+    height: 20rem;
+    background: #222229;
+    color: white;
+    font-family: "Inter";
+}
+
+main {
+    padding-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.toggle-control {
+    display: block;
+    position: relative;
+    padding-left: 100px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.toggle-control input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.toggle-control input:checked ~ .control {
+    background-color: #ec4034;
+}
+
+.toggle-control input:checked ~ .control:after {
+    left: 55px;
+}
+
+.toggle-control .control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 100px;
+    border-radius: 25px;
+    background-color: darkgray;
+    transition: background-color 0.15s ease-in;
+}
+
+.toggle-control .control:after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    background: white;
+    transition: left 0.15s ease-in;
+}
+
+.color {
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+h1 {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
 }

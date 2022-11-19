@@ -1,15 +1,28 @@
-const color = [255, 255, 255];
+// TODO:
+// - scaling issues with custom bar sizes
+// - save offsets
+// - multi video collision handler
+
 let vid, canvas, ctx;
 let x, y, width, height;
+let ox = (oy = ow = oh = 0);
 
 function isElement(element) {
     return element instanceof Element || element instanceof HTMLDocument;
 }
 
-const paintBar = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = `rgb(${color[0]},${color[1]},${color[2]})`;
-    ctx.fillRect(x, y, width, height);
+const rgbToString = (rgb) => {
+    const { a, r, g, b } = rgb;
+    return `rgba(${r},${g},${b},${a})`;
+};
+
+const paintBar = (clear = false) => {
+    chrome.storage.sync.get("color", function (data) {
+        let color = rgbToString(data.color);
+        if (clear) ctx.clearrect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = color;
+        ctx.fillRect(x + ox, y + oy, width + ow, height + oh);
+    });
 };
 
 const paintInitialBar = (w, h) => {
@@ -19,6 +32,8 @@ const paintInitialBar = (w, h) => {
     height = 0.1 * h;
     paintBar();
 };
+
+const saveOffsets = () => {};
 
 const hideSubs = () => {
     let pageURL = window.location.href;
@@ -58,14 +73,6 @@ const hideSubs = () => {
 
     paintInitialBar(vw, vh);
 
-    // uncomment these 4 lines if clicking wont pause the vid
-    if (!pageURL.includes("www.youtube.com")) {
-        canvas.addEventListener("click", function () {
-            if (vid.paused) vid.play();
-            else vid.pause();
-        });
-    }
-
     const resizeObserver = new ResizeObserver(() => {
         const [vw, vh] = [vid.clientWidth, vid.clientHeight];
         canvas.width = vw;
@@ -78,34 +85,40 @@ const hideSubs = () => {
         if (e.ctrlKey && e.shiftKey) {
             switch (e.keyCode) {
                 case 37:
-                    x--;
+                    ox--;
                     break;
                 case 38:
-                    y--;
+                    oy--;
                     break;
                 case 39:
-                    x++;
+                    ox++;
                     break;
                 case 40:
-                    y++;
+                    oy++;
                     break;
                 case 190:
-                    width++;
+                    ow++;
                     break;
                 case 188:
-                    width--;
+                    ow--;
                     break;
                 case 219:
-                    height--;
+                    oh--;
                     break;
                 case 221:
-                    height++;
+                    oh++;
                     break;
             }
         }
 
-        paintBar();
+        paintBar(true);
+        saveOffsets();
     });
 };
 
-hideSubs();
+const domain = new URL(location.href).hostname;
+chrome.storage.sync.get(domain, function (data) {
+    if (data[domain]["active"]) {
+        hideSubs();
+    }
+});

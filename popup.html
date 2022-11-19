@@ -5,8 +5,20 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="./popup.css" />
+        <link rel="stylesheet" href="./vendor/alwan.min.css" />
+        <script src="./vendor/alwan.min.js"></script>
     </head>
     <body>
+        <main>
+            <label class="toggle-control">
+                <input type="checkbox" id="checkbox" />
+                <span class="control"></span>
+            </label>
+            <section class="color">
+                <h1>Bar Color</h1>
+                <div id="color-picker" />
+            </section>
+        </main>
         <script src="./popup.js" type="module"></script>
     </body>
 </html>
