@@ -1,12 +1,12 @@
 // TODO:
 // - scaling issues with custom bar sizes
-// - save offsets
 
 const domain = new URL(location.href).hostname;
 
 let vid, canvas, ctx;
 let x, y, width, height;
 let ox = (oy = ow = oh = 0);
+let picker;
 
 function isElement(element) {
     return element instanceof Element || element instanceof HTMLDocument;
@@ -126,10 +126,9 @@ const hideSubs = () => {
     });
 };
 
-window.onbeforeunload = function(){
-    console.log("SAVING")
+window.onbeforeunload = function () {
     saveOffsets();
-}
+};
 
 chrome.storage.sync.get(domain, function (data) {
     if (data[domain]["active"]) {
@@ -140,23 +139,24 @@ chrome.storage.sync.get(domain, function (data) {
     oy = data[domain].oy || 0;
     oh = data[domain].oh || 0;
     ow = data[domain].ow || 0;
-
-    console.log(data, ox, oy, oh, ow);
 });
 
 chrome.runtime.onMessage.addListener((msgObj) => {
     if (msgObj.pick) {
         document.body.style.background = "rgba(0,0,0,.5)";
-        new ElementPicker({
+        picker = new ElementPicker({
             selectors: "video",
             action: {
                 trigger: "click",
                 callback: function (target) {
-                    target.classList.toggle("highlight");
-                    document.body.style.background = "auto";
-                    cleanup();
-                    vid = target;
-                    hideSubs();
+                    picker.close();
+
+                    if (target !== vid) {
+                        document.body.style.background = "auto";
+                        cleanup();
+                        vid = target;
+                        hideSubs();
+                    }
                 },
             },
         });
