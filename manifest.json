@@ -19,7 +19,7 @@
     },
     "content_scripts": [
         {
-            "js": ["scripts/content.js"],
+            "js": ["vendor/elementpicker.js", "scripts/content.js"],
             "matches": ["https://*/*", "http://*/*"]
         }
     ],

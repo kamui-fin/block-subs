@@ -1,7 +1,8 @@
 // TODO:
 // - scaling issues with custom bar sizes
 // - save offsets
-// - multi video collision handler
+
+const domain = new URL(location.href).hostname;
 
 let vid, canvas, ctx;
 let x, y, width, height;
@@ -19,7 +20,7 @@ const rgbToString = (rgb) => {
 const paintBar = (clear = false) => {
     chrome.storage.sync.get("color", function (data) {
         let color = rgbToString(data.color);
-        if (clear) ctx.clearrect(0, 0, canvas.width, canvas.height);
+        if (clear) ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = color;
         ctx.fillRect(x + ox, y + oy, width + ow, height + oh);
     });
@@ -33,10 +34,17 @@ const paintInitialBar = (w, h) => {
     paintBar();
 };
 
-const saveOffsets = () => {};
+const cleanup = () => {
+    canvas.remove();
+    canvas = ctx = vid = null;
+    ox = oy = ow = oh = 0;
+};
+
+const saveOffsets = () => {
+    chrome.storage.sync.set({ [domain]: { active: true, ox, oy, ow, oh } });
+};
 
 const hideSubs = () => {
-    let pageURL = window.location.href;
     let vids = document.getElementsByTagName("video");
 
     for (let video in vids) {
@@ -64,9 +72,12 @@ const hideSubs = () => {
     canvas.style.position = "absolute";
     canvas.style.top = 0;
     canvas.style.left = 0;
+    canvas.style.left = 0;
+    canvas.style.pointerEvents = "none";
     canvas.width = vw;
     canvas.height = vh;
 
+    vid.style.pointerEvents = "auto";
     vid.parentNode.insertBefore(canvas, vid.nextSibling);
 
     ctx = canvas.getContext("2d");
@@ -112,13 +123,42 @@ const hideSubs = () => {
         }
 
         paintBar(true);
-        saveOffsets();
     });
 };
 
-const domain = new URL(location.href).hostname;
+window.onbeforeunload = function(){
+    console.log("SAVING")
+    saveOffsets();
+}
+
 chrome.storage.sync.get(domain, function (data) {
     if (data[domain]["active"]) {
         hideSubs();
+    }
+
+    ox = data[domain].ox || 0;
+    oy = data[domain].oy || 0;
+    oh = data[domain].oh || 0;
+    ow = data[domain].ow || 0;
+
+    console.log(data, ox, oy, oh, ow);
+});
+
+chrome.runtime.onMessage.addListener((msgObj) => {
+    if (msgObj.pick) {
+        document.body.style.background = "rgba(0,0,0,.5)";
+        new ElementPicker({
+            selectors: "video",
+            action: {
+                trigger: "click",
+                callback: function (target) {
+                    target.classList.toggle("highlight");
+                    document.body.style.background = "auto";
+                    cleanup();
+                    vid = target;
+                    hideSubs();
+                },
+            },
+        });
     }
 });

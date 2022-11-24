@@ -1,3 +1,6 @@
+/*
+ */
+
 const rgbToString = (rgb) => {
     const { a, r, g, b } = rgb;
     return `rgba(${r},${g},${b},${a})`;
@@ -39,3 +42,13 @@ const configurePicker = (color) => {
 chrome.storage.sync.get("color", (data) => {
     configurePicker(data.color);
 });
+
+// video toggle
+const pickVidBtn = document.querySelector(".pick-vid");
+pickVidBtn.onclick = () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        const tab = tabs[0];
+        chrome.tabs.sendMessage(tab.id, { pick: true });
+    });
+    window.close();
+};
